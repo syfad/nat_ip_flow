@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'natapp',
+    'django_echarts',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

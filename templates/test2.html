@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div>测试仪2</div>
+
+
+{% for ips in idc_list %}
+    {% for ip in ips.POOL1 %}
+        <div>{{ ip }}</div>
+    {% endfor %}
+<div>{{ ips.POOL1 }}</div>
+
+{% endfor %}
+
+
+{#{% endfor %}#}
+
+
+
+
+</body>
+</html>

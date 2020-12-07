@@ -17,11 +17,18 @@ from django.contrib import admin
 from django.urls import path, re_path, include
 from natapp import views
 
-
+from django.conf.urls import url
 
 
 urlpatterns = [
     path('login/', views.login),
     path('graph/', views.graph),
-    re_path(r'^index/', views.index)
+    re_path(r'^index/', views.index),
+    re_path(r'detail/', views.detail),
+    re_path(r'detail1/', views.detail1),
+
+    # re_path(r'^test/$', views.IndexView.as_view(), name='demo'),
+
+    url(r'^bar/$', views.ChartView.as_view(), name='natapp'),
+    url(r'^test/$', views.IndexView.as_view(), name='natapp'),
 ]

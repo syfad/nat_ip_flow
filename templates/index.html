@@ -69,7 +69,7 @@
         <div class="content">
 {#            <div class="body"><a href="/monitor/user_info/">用户列表</a></div>#}
             {% for idc in idc_list %}
-                <div class="body"><a href="/monitor/graph/">{{idc.IDC}}</a></div>
+                <div class="body"><a href="/monitor/graph/?idc={{ idc.IDC }}">{{idc.IDC}}</a></div>
             {% endfor %}
         </div>
     </div>

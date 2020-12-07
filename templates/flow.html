@@ -14,15 +14,21 @@
 
     // 指定图表的配置项和数据
 
+
+
     option = {
         title: {
-            text: 'IP流量图'
+            text: 'IP流量图',
         },
         tooltip: {
             trigger: 'axis'
         },
         legend: {
-            data: ['IP1', 'IP2', 'IP3', 'IP4', 'IP5']
+
+            data:
+
+                ['IP1', 'IP2', 'IP3', 'IP4', 'IP5']
+
         },
         grid: {
             left: '10%',
@@ -76,10 +82,15 @@
                 data: [820, 932, 901, 934, 1290, 1330, 1320]
             }
         ]
+
     };
+
+
 
     // 使用刚指定的配置项和数据显示图表。
     myChart.setOption(option);
+
+
 </script>
 </body>
 </html>
