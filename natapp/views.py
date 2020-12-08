@@ -9,6 +9,7 @@ from natapp import models
 import json
 from random import randrange
 
+from django.core import serializers
 from django.http import HttpResponse
 from rest_framework.views import APIView
 
@@ -75,9 +76,16 @@ def Idc_graph(request):
 
     if request.method == "GET":
         idc = request.GET.get('idc')
-
         IDC = models.IDC_IP_LIST.objects.filter(IDC=idc)
-        return render(request, 'flow.html', {'idc_list': IDC})
+
+        for i in IDC:
+            IDC = i.IDC
+            IPS = i.POOL1
+            IP_list = list(eval(i.POOL1))
+
+
+        # return render(request, 'flow.html', {'idc_list': json.dumps(IDC), 'ips_list': IPS})
+        return render(request, 'flow.html', {'idc_list': IDC, 'ips_list': IP_list, 'ips': IPS})
 
     elif request.method == "POST":
         # 获取用户通过post提交过来的数据
@@ -106,10 +114,17 @@ def detail1(request):
     if request.method == "GET":
         idc = request.GET.get('idc')
 
-        # IDC = models.IDC_IP_LIST.objects.filter(IDC=idc)
-        IDC = models.IDC_IP_LIST.objects.filter(IDC=idc).values()
-        # IDC = models.IDC_IP_LIST.objects.values()
-        return render(request, 'test2.html', {'idc_list': IDC})
+        IDCS = models.IDC_IP_LIST.objects.filter(IDC=idc)
+
+        for i in IDCS:
+            IDC = i.IDC
+            IPS = i.POOL1
+            IP_list = list(eval(i.POOL1))
+
+
+
+        return render(request, 'test2.html', {'idc_list': IDC, 'ips_list': IP_list, 'ips': IPS})
+        # return render(request, 'test2.html', {'idc_list': IDC})
         # return render(request, 'test2.html')
 
 

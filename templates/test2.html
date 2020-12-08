@@ -9,18 +9,29 @@
 <div>测试仪2</div>
 
 
-{% for ips in idc_list %}
-    {% for ip in ips.POOL1 %}
-        <div>{{ ip }}</div>
-    {% endfor %}
-<div>{{ ips.POOL1 }}</div>
+{#{% for i in  idc_list %}#}
+    <div>{{ idc_list }}</div>
 
+{% for i in ips_list %}
+    <div>{{ i }}</div>
 {% endfor %}
 
+{{ ips }}
 
 {#{% endfor %}#}
 
 
+
+
+{#<script type="text/javascript">#}
+{#    var ips_data = [];#}
+{#    {% for item in ips_list %}#}
+{#        ips_data.push({{ item }})#}
+{#    {% endfor %}#}
+{##}
+{#    ips_data#}
+{##}
+{#</script>#}
 
 
 </body>

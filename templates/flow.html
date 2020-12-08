@@ -7,14 +7,26 @@
 </head>
 <body>
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-<div id="main" style="width: 900px;height:400px;"></div>
+
+<div id="main" style="width: 800px;height:400px;"></div>
 <script type="text/javascript">
     // 基于准备好的dom，初始化echarts实例
     var myChart = echarts.init(document.getElementById('main'));
 
+    var series_data = [];
+    var xAxis_data = [];
+    var ips_data = [];
+    var ips_name = [];
+
+
+{#    {% for i in ips %}#}
+{#        ips_data.push({{ i }});#}
+{#    {% endfor %}#}
+
+    {% for item in ips_list %}
+        ips_name.push({{ item }});
+    {% endfor %}
     // 指定图表的配置项和数据
-
-
 
     option = {
         title: {
@@ -24,11 +36,7 @@
             trigger: 'axis'
         },
         legend: {
-
-            data:
-
-                ['IP1', 'IP2', 'IP3', 'IP4', 'IP5']
-
+            data: []
         },
         grid: {
             left: '10%',
@@ -52,35 +60,11 @@
         },
         series: [
             {
-                name: 'IP1',
+                name: '',
                 type: 'line',
                 stack: '总量',
                 data: [120, 132, 101, 134, 90, 230, 210]
             },
-            {
-                name: 'IP2',
-                type: 'line',
-                stack: '总量',
-                data: [220, 182, 191, 234, 290, 330, 310]
-            },
-            {
-                name: 'IP3',
-                type: 'line',
-                stack: '总量',
-                data: [150, 232, 201, 154, 190, 330, 410]
-            },
-            {
-                name: 'IP4',
-                type: 'line',
-                stack: '总量',
-                data: [320, 332, 301, 334, 390, 330, 320]
-            },
-            {
-                name: 'IP5',
-                type: 'line',
-                stack: '总量',
-                data: [820, 932, 901, 934, 1290, 1330, 1320]
-            }
         ]
 
     };
@@ -88,9 +72,14 @@
 
 
     // 使用刚指定的配置项和数据显示图表。
+    myChart.clear();
+    option.legend.data=ips_data;
+    option.series[0].name=ips_name;
     myChart.setOption(option);
 
 
 </script>
+    <script src="/static/js/jquery.min.js?v=2.1.4"></script>
+    <script src="/static/js/bootstrap.min.js?v=3.3.6"></script>
 </body>
 </html>
