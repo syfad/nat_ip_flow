@@ -13,21 +13,12 @@
     // 基于准备好的dom，初始化echarts实例
     var myChart = echarts.init(document.getElementById('main'));
 
-    var series_data = [];
-    var xAxis_data = [];
     var ips_data = [];
-    var ips_name = [];
 
-
-{#    {% for i in ips %}#}
-{#        ips_data.push({{ i }});#}
-{#    {% endfor %}#}
-
-    {% for item in ips_list %}
-        ips_name.push({{ item }});
+    {% for i in ips_list %}
+        ips_data.push('{{ i }}');
     {% endfor %}
     // 指定图表的配置项和数据
-
     option = {
         title: {
             text: 'IP流量图',
@@ -51,7 +42,6 @@
         },
         xAxis: {
             type: 'category',
-            {#type: 'time',#}
             boundaryGap: false,
             data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
         },
@@ -59,24 +49,22 @@
             type: 'value'
         },
         series: [
+            {% for ip in ips_list %}
+
             {
-                name: '',
+                name: '{{ ip }}',
                 type: 'line',
                 stack: '总量',
                 data: [120, 132, 101, 134, 90, 230, 210]
             },
+            {% endfor %}
         ]
-
     };
-
-
 
     // 使用刚指定的配置项和数据显示图表。
     myChart.clear();
     option.legend.data=ips_data;
-    option.series[0].name=ips_name;
     myChart.setOption(option);
-
 
 </script>
     <script src="/static/js/jquery.min.js?v=2.1.4"></script>

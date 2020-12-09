@@ -5,18 +5,15 @@ from django.shortcuts import HttpResponse
 from django.shortcuts import render
 from django.shortcuts import redirect
 from natapp import models
-
 import json
 from random import randrange
-
 from django.core import serializers
 from django.http import HttpResponse
 from rest_framework.views import APIView
-
 from pyecharts.charts import Bar
 from pyecharts.charts import Kline
 from pyecharts import options as opts
-
+from natapp import es_model
 
 
 def login(request):
@@ -54,11 +51,12 @@ def graph(request):
         if obj:
             res = redirect('admin/')
             # 设置cookie，max_age多少秒之后失效
-            #res.set_cookie('username_cookie', user, max_age=600)
+            # res.set_cookie('username_cookie', user, max_age=600)
             return res
         else:
             error_msg = "用户名密码错误"
             return render(request, 'login.html', {'error_msg': error_msg})
+
 
 def index(request):
     if request.method == "GET":
@@ -68,25 +66,21 @@ def index(request):
     elif request.method == "POST":
         IDC = models.IDC_IP_LIST.objects.filter(IDC="bjcc")
         return render(request, 'index.html', {'idc_list': IDC})
-    return render(request,'index.html')
+    return render(request, 'index.html')
+
 
 def Idc_graph(request):
     error_msg = ''
-
-
     if request.method == "GET":
         idc = request.GET.get('idc')
         IDC = models.IDC_IP_LIST.objects.filter(IDC=idc)
-
         for i in IDC:
             IDC = i.IDC
-            IPS = i.POOL1
             IP_list = list(eval(i.POOL1))
 
+        # flow_data = es_model.EsHandler.get_flow_data('bjcc', 1607505780, '111.206.250.195')
 
-        # return render(request, 'flow.html', {'idc_list': json.dumps(IDC), 'ips_list': IPS})
-        return render(request, 'flow.html', {'idc_list': IDC, 'ips_list': IP_list, 'ips': IPS})
-
+        return render(request, 'flow.html', {'idc_list': IDC, 'ips_list': IP_list})
     elif request.method == "POST":
         # 获取用户通过post提交过来的数据
         user = request.POST.get('user', None)
@@ -118,22 +112,11 @@ def detail1(request):
 
         for i in IDCS:
             IDC = i.IDC
-            IPS = i.POOL1
             IP_list = list(eval(i.POOL1))
-
-
-
-        return render(request, 'test2.html', {'idc_list': IDC, 'ips_list': IP_list, 'ips': IPS})
+        flow_data = es_model.EsHandler.get_flow_data('bjcc', 1607505780, '111.206.250.195')
+        return render(request, 'test2.html', {'idc_list': IDC, 'ips_list': IP_list, 'flow_data': flow_data})
         # return render(request, 'test2.html', {'idc_list': IDC})
         # return render(request, 'test2.html')
-
-
-
-
-
-
-
-
 
 
 
@@ -174,11 +157,11 @@ JsonError = json_error
 def bar_base() -> Bar:
     c = (
         Bar()
-        .add_xaxis(["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"])
-        .add_yaxis("商家A", [randrange(0, 100) for _ in range(6)])
-        .add_yaxis("商家B", [randrange(0, 100) for _ in range(6)])
-        .set_global_opts(title_opts=opts.TitleOpts(title="bar-基本示例", subtitle="我是副标题"))
-        .dump_options_with_quotes()
+            .add_xaxis(["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"])
+            .add_yaxis("商家A", [randrange(0, 100) for _ in range(6)])
+            .add_yaxis("商家B", [randrange(0, 100) for _ in range(6)])
+            .set_global_opts(title_opts=opts.TitleOpts(title="bar-基本示例", subtitle="我是副标题"))
+            .dump_options_with_quotes()
     )
     return c
 

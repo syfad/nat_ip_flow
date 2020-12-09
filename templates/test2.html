@@ -10,13 +10,16 @@
 
 
 {#{% for i in  idc_list %}#}
-    <div>{{ idc_list }}</div>
+{#    <div>{{ idc_list }}</div>#}
+{##}
+{#{% for i in ips_list %}#}
+{#    <div>{{ i }}</div>#}
+{#{% endfor %}#}
+{##}
+{#{{ ips }}#}
 
-{% for i in ips_list %}
-    <div>{{ i }}</div>
-{% endfor %}
 
-{{ ips }}
+{{ flow_data }}
 
 {#{% endfor %}#}
 

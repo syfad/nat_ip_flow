@@ -58,7 +58,7 @@
 <!--两种写法，产生效果不同-->
 <div style="position: absolute; left: 0; right: 0; top: 0; background-color: #0a6aa1; height: 40px">
     <div style="width: 980px; margin: auto; color: white; line-height: 40px">
-        <a>管理后台demo</a>
+        <a>NAT流量管理</a>
         <a style="float: right; margin-right: 15px">登录</a>
         <a style="float: right; margin-right: 15px;">注册</a>
     </div>
@@ -67,7 +67,7 @@
 
 <div style="margin-top: 80px; height: 50px; width: 200px">
     <div class="item">
-        <div id="i1" class="header" onclick="changeMenu('i1');">机房列表</div>
+        <div id="i1" class="header" onclick="changeMenu('i1');">IDC机房列表</div>
         <div class="content">
 {#            <div class="body"><a href="/monitor/user_info/">用户列表</a></div>#}
             {% for idc in idc_list %}
@@ -79,7 +79,7 @@
 
 
     <div class="item">
-        <div id="i2" class="header" onclick="changeMenu('i2');">资产管理</div>
+        <div id="i2" class="header" onclick="changeMenu('i2');">地址池IP</div>
         <div class="content hide">
             <div class="body">内容1</div>
             <div class="body">内容2</div>
@@ -108,78 +108,7 @@
 </div>
 
 
-<div id="main" style="left: 260px; width: 750px;height:350px;"></div>
-<script type="text/javascript">
-    // 基于准备好的dom，初始化echarts实例
-    var myChart = echarts.init(document.getElementById('main'));
-
-    var series_data = [];
-    var xAxis_data = [];
-    var ips_data = [];
-    var ips_name = [];
-
-
-{#    {% for item in idc_list %}#}
-{#        ips_data.push({{ ips_list }})#}
-{##}
-{#    {% endfor %}#}
-{##}
-{#    {% for item in ips_list %}#}
-{#        ips_name.push({{ item }})#}
-{#    {% endfor %}#}
-    // 指定图表的配置项和数据
-
-    option = {
-        title: {
-            text: 'IP流量图',
-        },
-        tooltip: {
-            trigger: 'axis'
-        },
-        legend: {
-            data: ['IP1']
-        },
-        grid: {
-            left: '10%',
-            right: '0%',
-            bottom: '0%',
-            containLabel: true
-        },
-        toolbox: {
-            feature: {
-                saveAsImage: {}
-            }
-        },
-        xAxis: {
-            type: 'category',
-            {#type: 'time',#}
-            boundaryGap: false,
-            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [
-            {
-                name: 'IP1',
-                type: 'line',
-                stack: '总量',
-                data: [120, 132, 101, 134, 90, 230, 210]
-            },
-        ]
-
-    };
-
-
-
-    // 使用刚指定的配置项和数据显示图表。
-    {#myChart.clear();#}
-    {#option.legend.data=ips_data;#}
-    {#option.series[0].name=ips_data[0];#}
-    myChart.setOption(option);
-
-
-</script>
+{#<div id="main" style="left: 260px; width: 750px;height:350px;"></div>#}
 
 
 {##}
