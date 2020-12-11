@@ -18,11 +18,29 @@
 {##}
 {#{{ ips }}#}
 
+{#<div>{{ flow_data }}</div>#}
+{% for i in ips_list %}
+<div>{{ i }}</div>
+{% endfor %}
+<div><a>======================分隔符======================</a></div>
 
-{{ flow_data }}
-
+{#{% for k,v in flow_data.items %}#}
+{#<div>{{ k }}-{{ v }}</div>#}
 {#{% endfor %}#}
 
+
+{#{% for i in flow_data %}#}
+{#    {% for x in i %}#}
+{#        <div>{{ x.time_s }}</div>#}
+{#        <div>{{ x.IP }}</div>#}
+{#        <div>{{ i.transfer_in }}</div>#}
+{#        <div>{{ i.transfer_out }}</div>#}
+{#    {% endfor %}#}
+{#{% endfor %}#}
+
+<div style="color: #8a1f11"><a>======================分隔符======================</a></div>
+
+{{ flow_data }}
 
 
 

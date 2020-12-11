@@ -14,6 +14,7 @@ from pyecharts.charts import Bar
 from pyecharts.charts import Kline
 from pyecharts import options as opts
 from natapp import es_model
+import time, datetime
 
 
 def login(request):
@@ -70,6 +71,11 @@ def index(request):
 
 
 def Idc_graph(request):
+    es = es_model.EsHandler()
+    dtime = (datetime.datetime.now() + datetime.timedelta(minutes=-1)).strftime("%Y.%m.%d %H:%M")
+    dtime_15ago = (datetime.datetime.now() + datetime.timedelta(minutes=-15)).strftime("%Y.%m.%d %H:%M")
+    ts = int(time.mktime(time.strptime(dtime, "%Y.%m.%d %H:%M")))
+    ts15 = int(time.mktime(time.strptime(dtime_15ago, "%Y.%m.%d %H:%M")))
     error_msg = ''
     if request.method == "GET":
         idc = request.GET.get('idc')
@@ -77,10 +83,14 @@ def Idc_graph(request):
         for i in IDC:
             IDC = i.IDC
             IP_list = list(eval(i.POOL1))
+    
+        ipPool_data = []
+        for ip in IP_list:
+            flow_data = es.Get_flow_data('bjcc', ts15, ts, ip)
+            ipPool_data.append(flow_data)
 
-        # flow_data = es_model.EsHandler.get_flow_data('bjcc', 1607505780, '111.206.250.195')
+        return render(request, 'flow.html', {'idc_list': IDC, 'ips_list': IP_list, 'flow_data': ipPool_data})
 
-        return render(request, 'flow.html', {'idc_list': IDC, 'ips_list': IP_list})
     elif request.method == "POST":
         # 获取用户通过post提交过来的数据
         user = request.POST.get('user', None)
@@ -113,12 +123,23 @@ def detail1(request):
         for i in IDCS:
             IDC = i.IDC
             IP_list = list(eval(i.POOL1))
-        flow_data = es_model.EsHandler.get_flow_data('bjcc', 1607505780, '111.206.250.195')
-        return render(request, 'test2.html', {'idc_list': IDC, 'ips_list': IP_list, 'flow_data': flow_data})
+
+        dtime = (datetime.datetime.now() + datetime.timedelta(minutes=-1)).strftime("%Y.%m.%d %H:%M")
+        dtime_15ago = (datetime.datetime.now() + datetime.timedelta(minutes=-15)).strftime("%Y.%m.%d %H:%M")
+
+        ts = int(time.mktime(time.strptime(dtime, "%Y.%m.%d %H:%M")))
+        ts15 = int(time.mktime(time.strptime(dtime_15ago, "%Y.%m.%d %H:%M")))
+
+        xlist = ['111.206.250.195', '111.206.250.201', '111.206.250.227', '111.206.250.233']
+        es = es_model.EsHandler()
+        all_data = []
+        for ip in xlist:
+            flow_data = es.Get_flow_data('bjcc', ts15, ts, ip)
+            all_data.append(flow_data)
+
+        return render(request, 'test2.html', {'idc_list': IDC, 'ips_list': IP_list, 'flow_data': all_data})
         # return render(request, 'test2.html', {'idc_list': IDC})
         # return render(request, 'test2.html')
-
-
 
 
 def response_as_json(data):
