@@ -86,7 +86,7 @@ def Idc_graph(request):
     
         ipPool_data = []
         for ip in IP_list:
-            flow_data = es.Get_flow_data('bjcc', ts15, ts, ip)
+            flow_data = es.flow_data('bjcc', ts15, ts, ip)
             ipPool_data.append(flow_data)
 
         return render(request, 'flow.html', {'idc_list': IDC, 'ips_list': IP_list, 'flow_data': ipPool_data})
@@ -134,7 +134,7 @@ def detail1(request):
         es = es_model.EsHandler()
         all_data = []
         for ip in xlist:
-            flow_data = es.Get_flow_data('bjcc', ts15, ts, ip)
+            flow_data = es.flow_data('bjcc', ts15, ts, ip)
             all_data.append(flow_data)
 
         return render(request, 'test2.html', {'idc_list': IDC, 'ips_list': IP_list, 'flow_data': all_data})
