@@ -42,12 +42,16 @@
 
 {% for flow_datum in flow_data %}
 {% for foo in flow_datum %}
-<div>{{ foo.IP }}</div>
+<div>{{ foo }}</div>
 {% endfor %}
 {% endfor %}
 
 {#{{ flow_data }}#}
 
+
+{{ legend }}
+{#{{ yaxis }}#}
+{{ series }}
 
 
 </body>

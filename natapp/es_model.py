@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# @Date    : 2020
-# @Author  : SunYunfeng(sun_admin@126.com)
-# @Disc    : 
-# @Disc    : support python 2.x and 3.x
 
 from elasticsearch import Elasticsearch as Elast
 from elasticsearch import Elasticsearch
@@ -89,9 +83,10 @@ class EsHandler(object):
                 v_Transfer_out = self.ConvertMB(flowBytes_out)
                 time_s = self.ConvertStime(time_s).split(' ')[1]
 
-                flow = {"time_s": time_s, "IP": IP, "transfer_in": v_Transfer_in, "transfer_out": v_Transfer_out}
-
+                # flow = {"time_s": time_s, "IP": IP, "transfer_in": v_Transfer_in, "transfer_out": v_Transfer_out}
+                flow = {"time_s": time_s, "IP": IP, "transfer_in": v_Transfer_in}
                 flow_data.append(flow)
+
 
             flow_data.sort(key=lambda e: e.__getitem__('time_s'))
             

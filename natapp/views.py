@@ -137,7 +137,24 @@ def detail1(request):
             flow_data = es.flow_data('bjcc', ts15, ts, ip)
             all_data.append(flow_data)
 
-        return render(request, 'test2.html', {'idc_list': IDC, 'ips_list': IP_list, 'flow_data': all_data})
+        di = []
+        for f_data in all_data:
+            for i in f_data:
+                if i["IP"] in di:
+                    f_data[i["IP"]].append(i)
+                else:
+                    f_data[i["IP"]] = [i]
+            legend = f_data.keys()
+        # yaxis = [x["time_s"] for x in next(iter(di.values()))]
+        series = []
+        for k in legend:
+            ob = {
+                "name": k,
+                "data": [x["transfer_in"] for x in di[k]]
+            }
+            series.append(ob)
+
+        return render(request, 'test2.html', {'idc_list': IDC, 'ips_list': IP_list, 'flow_data': all_data, 'legend': legend,'yaxis': yaxis, 'series':series})
         # return render(request, 'test2.html', {'idc_list': IDC})
         # return render(request, 'test2.html')
 

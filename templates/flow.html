@@ -9,12 +9,14 @@
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
 
 <div id="main" style="width: 800px;height:250px;">
-<<<<<<< HEAD
     <script type="text/javascript">
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('main'));
-        data = {{ flow_data }}
-            di = dict()
+
+        var data = "{{ flow_data }}"
+
+        di = dict();
+
         for line in data:
             for i in line:
                 if i["IP"] in di:
@@ -22,8 +24,16 @@
                 else:
                     di[i["IP"]] = [i]
         legend = di.keys()
-        yaxis = [x[""]]
+        print(legend)
 
+        {#yaxis = [x[""]]#}
+        series = []
+        for k in legend:
+            ob = {
+                "name": k,
+                "data": [x["transfer_in"] for x in di[k]]
+            }
+            series.append(ob)
 
 
         option = {
