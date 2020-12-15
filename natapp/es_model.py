@@ -11,6 +11,8 @@ from django.conf import settings
 import time, datetime
 
 
+
+
 class EsHandler(object):
     def __init__(self, host=settings.ES[0], port=int(settings.ES[1]), es_user=settings.ES_USER,
                  es_password=settings.ES_PASSWORD):
@@ -45,7 +47,7 @@ class EsHandler(object):
             print(e)
             return ''
 
-    def Get_flow_data(self, idc, mtime_ago, nowtime, ip):
+    def flow_data(self, idc, mtime_ago, nowtime, ip):
         # global res_flow
         body = {
             "query": {

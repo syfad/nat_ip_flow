@@ -3,12 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="d0ce41f6-e979-4586-b9ca-bf1c17341424" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nat_ip_flow/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/nat_ip_flow/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nat_ip_flow/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/nat_ip_flow/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natapp/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/natapp/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/natapp/es_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/natapp/es_model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/natapp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/natapp/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/flow.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/flow.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -189,12 +186,12 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Django server.nat_ip_flow" />
       <item itemvalue="Django tests.Test: " />
       <item itemvalue="Django tests.Test: nat_ip_flow" />
-      <item itemvalue="Python.views" />
       <item itemvalue="Python.es_model" />
       <item itemvalue="Python.test1" />
+      <item itemvalue="Python.views" />
+      <item itemvalue="Django server.nat_ip_flow" />
     </list>
     <recent_temporary>
       <list>
@@ -219,7 +216,7 @@
       <workItem from="1606815356931" duration="53353000" />
       <workItem from="1607486069639" duration="11782000" />
       <workItem from="1607574689609" duration="20417000" />
-      <workItem from="1608007282163" duration="14448000" />
+      <workItem from="1608007282163" duration="14820000" />
     </task>
     <servers />
   </component>
