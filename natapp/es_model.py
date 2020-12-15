@@ -72,23 +72,27 @@ class EsHandler(object):
         }
         try:
             flow_data = []
+
+            stime = []
             result = self.Get_res(self.index_prefix, body)
+            transfer_in_list = []
 
             for i in result['hits']['hits']:
                 flowBytes_in = i['_source']['FLOW_Total_IN']
                 flowBytes_out = i['_source']['FLOW_Total_OUT']
                 time_s = i['_source']['TIMESTAMP']
                 IP = i['_source']['IP']
-                #格式化数据
+                # 格式化数据
                 v_Transfer_in = self.ConvertMB(flowBytes_in)
                 v_Transfer_out = self.ConvertMB(flowBytes_out)
                 time_s = self.ConvertStime(time_s).split(' ')[1]
 
-                data_flow = {"time_s": time_s, "IP": IP, "transfer_in": v_Transfer_in, "transfer_out": v_Transfer_out}
-                flow_data.append(data_flow)
+                flow = {"time_s": time_s, "IP": IP, "transfer_in": v_Transfer_in, "transfer_out": v_Transfer_out}
+
+                flow_data.append(flow)
+
             flow_data.sort(key=lambda e: e.__getitem__('time_s'))
+            
             return flow_data
         except Exception as e:
             print(e)
-
-

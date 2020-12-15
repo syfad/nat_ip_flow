@@ -142,6 +142,10 @@ def detail1(request):
         # return render(request, 'test2.html')
 
 
+
+
+
+
 def response_as_json(data):
     json_str = json.dumps(data)
     response = HttpResponse(

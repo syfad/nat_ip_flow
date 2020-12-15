@@ -9,143 +9,142 @@
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
 
 <div id="main" style="width: 800px;height:250px;">
-<script type="text/javascript">
-    // 基于准备好的dom，初始化echarts实例
-    var myChart = echarts.init(document.getElementById('main'));
-    {#var ips_data = [];#}
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+        data = {{ flow_data }}
+            di = dict()
+        for line in data:
+            for i in line:
+                if i["IP"] in di:
+                    di[i["IP"]].append(i)
+                else:
+                    di[i["IP"]] = [i]
+        legend = di.keys()
+        yaxis = [x[""]]
 
-{#    {% for i in ips_list %}#}
-{#        ips_data.push('{{ i }}');#}
-{#    {% endfor %}#}
-    // 指定图表的配置项和数据
 
 
-    option = {
-        title: {
-            text: 'IP流量图IN',
-        },
-        tooltip: {
-            trigger: 'axis'
-        },
-        legend: {
-            data: [
-                {% for ip in ips_list %}
-                        '{{ ip }}',
-                {% endfor %}
-                ]
-        },
-        grid: {
-            left: '10%',
-            right: '0%',
-            bottom: '0%',
-            containLabel: true
-        },
-        toolbox: {
-            feature: {
-                saveAsImage: {}
-            }
-        },
-        xAxis: {
-            type: 'category',
-            boundaryGap: false,
-            data: ['1','2','3','4','5','6']
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [
-            {% for ip in ips_list %}
-            {
-                name: '{{ ip }}',
-                type: 'line',
-                stack: '总量',
-                data: [23,34,5,67,45,12]
+        option = {
+            title: {
+                text: 'IP流量图IN',
             },
-            {% endfor %}
-        ]
-    };
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['',]
+            },
+            grid: {
+                left: '10%',
+                right: '0%',
+                bottom: '0%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['1', '2', '3', '4', '5', '6']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {% for ip in ips_list %}
+                    {
+                        name: '{{ ip }}',
+                        type: 'line',
+                        stack: '总量',
+                        data: [23, 34, 5, 67, 45, 12]
+                    },
+                {% endfor %}
+            ]
+        };
 
 
+        // 使用刚指定的配置项和数据显示图表。
+        {#myChart.clear();#}
+        {#option.legend.data=ips_data;#}
+        myChart.setOption(option);
 
-    // 使用刚指定的配置项和数据显示图表。
-    {#myChart.clear();#}
-    {#option.legend.data=ips_data;#}
-    myChart.setOption(option);
-
-</script>
+    </script>
 </div>
 <p style="margin: 10px">
--
+    -
 </p>
 <div id="main1" style="width: 800px;height:250px;">
-<script type="text/javascript">
-    // 基于准备好的dom，初始化echarts实例
-    var myChart1 = echarts.init(document.getElementById('main1'));
-    {#var ips_data = [];#}
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart1 = echarts.init(document.getElementById('main1'));
+        {#var ips_data = [];#}
 
-{#    {% for i in ips_list %}#}
-{#        ips_data.push('{{ i }}');#}
-{#    {% endfor %}#}
-    // 指定图表的配置项和数据
+        {#    {% for i in ips_list %}#}
+        {#        ips_data.push('{{ i }}');#}
+        {#    {% endfor %}#}
+        // 指定图表的配置项和数据
 
 
-    option = {
-        title: {
-            text: 'IP流量图OUT',
-        },
-        tooltip: {
-            trigger: 'axis'
-        },
-        legend: {
-            data: [
-                {% for ip in ips_list %}
-                        '{{ ip }}',
-                {% endfor %}
-                ]
-        },
-        grid: {
-            left: '10%',
-            right: '0%',
-            bottom: '0%',
-            containLabel: true
-        },
-        toolbox: {
-            feature: {
-                saveAsImage: {}
-            }
-        },
-        xAxis: {
-            type: 'category',
-            boundaryGap: false,
-            data: ['1','2','3','4','5','6']
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [
-            {% for ip in ips_list %}
-            {
-                name: '{{ ip }}',
-                type: 'line',
-                stack: '总量',
-                data: [23,34,5,67,45,12]
+        option = {
+            title: {
+                text: 'IP流量图OUT',
             },
-            {% endfor %}
-        ]
-    };
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: [
+                    {% for ip in ips_list %}
+                        '{{ ip }}',
+                    {% endfor %}
+                ]
+            },
+            grid: {
+                left: '10%',
+                right: '0%',
+                bottom: '0%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['1', '2', '3', '4', '5', '6']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {% for ip in ips_list %}
+                    {
+                        name: '{{ ip }}',
+                        type: 'line',
+                        stack: '总量',
+                        data: [23, 34, 5, 67, 45, 12]
+                    },
+                {% endfor %}
+            ]
+        };
 
 
+        // 使用刚指定的配置项和数据显示图表。
+        {#myChart.clear();#}
+        {#option.legend.data=ips_data;#}
+        myChart1.setOption(option);
 
-    // 使用刚指定的配置项和数据显示图表。
-    {#myChart.clear();#}
-    {#option.legend.data=ips_data;#}
-    myChart1.setOption(option);
-
-</script>
+    </script>
 
 </div>
 
 </body>
-    <script src="/static/js/jquery.min.js?v=2.1.4"></script>
-    <script src="/static/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="/static/js/jquery.min.js?v=2.1.4"></script>
+<script src="/static/js/bootstrap.min.js?v=3.3.6"></script>
 </html>

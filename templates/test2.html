@@ -40,20 +40,18 @@
 
 <div style="color: #8a1f11"><a>======================分隔符======================</a></div>
 
-{{ flow_data }}
+{% for flow_datum in flow_data %}
+{% for foo in flow_datum %}
+<div>{{ foo.IP }}</div>
+{% endfor %}
+{% endfor %}
 
+{#{{ flow_data }}#}
 
-
-{#<script type="text/javascript">#}
-{#    var ips_data = [];#}
-{#    {% for item in ips_list %}#}
-{#        ips_data.push({{ item }})#}
-{#    {% endfor %}#}
-{##}
-{#    ips_data#}
-{##}
-{#</script>#}
 
 
 </body>
+<script>
+
+</script>
 </html>
