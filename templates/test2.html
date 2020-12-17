@@ -38,20 +38,32 @@
 {#    {% endfor %}#}
 {#{% endfor %}#}
 
-<div style="color: #8a1f11"><a>======================分隔符======================</a></div>
-
 {% for flow_datum in flow_data %}
 {% for foo in flow_datum %}
 <div>{{ foo }}</div>
 {% endfor %}
 {% endfor %}
 
-{#{{ flow_data }}#}
+<div style="color: #8a1f11"><a>======================分隔符======================</a></div>
 
 
-{{ legend }}
-{#{{ yaxis }}#}
+
+{% for i in legend %}
+    {{ i }}
+{% endfor %}
+
+
+{% for yaxi in yaxis %}
+<div>{{ yaxi }}</div>
+{% endfor %}
+
+{{ idc_list }}
+
+
+<div style="color: #8a1f11"><a>======================分隔符======================</a></div>
+
 {{ series }}
+
 
 
 </body>

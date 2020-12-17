@@ -79,17 +79,37 @@ def Idc_graph(request):
     error_msg = ''
     if request.method == "GET":
         idc = request.GET.get('idc')
-        IDC = models.IDC_IP_LIST.objects.filter(IDC=idc)
-        for i in IDC:
+        IDCS = models.IDC_IP_LIST.objects.filter(IDC=idc)
+        for i in IDCS:
             IDC = i.IDC
             IP_list = list(eval(i.POOL1))
-    
+
         ipPool_data = []
         for ip in IP_list:
-            flow_data = es.flow_data('bjcc', ts15, ts, ip)
+            flow_data = es.flow_data(IDC, ts15, ts, ip)
             ipPool_data.append(flow_data)
 
-        return render(request, 'flow.html', {'idc_list': IDC, 'ips_list': IP_list, 'flow_data': ipPool_data})
+        di = dict()
+        for f_data in ipPool_data:
+            for i in f_data:
+                if i["IP"] in di:
+                    di[i["IP"]].append(i)
+                else:
+                    di[i["IP"]] = [i]
+
+        legend = di.keys()
+        yaxis = [x["time_s"] for x in next(iter(di.values()))]
+
+        series = []
+        for k in legend:
+            ob = {
+                "name": k,
+                "data": [x["transfer_in"] for x in di[k]]
+            }
+            series.append(ob)
+
+
+        return render(request, 'flow.html', {'idc_list': IDC, 'ips_list': IP_list, 'legend': legend, 'yaxis': yaxis, 'series': series})
 
     elif request.method == "POST":
         # 获取用户通过post提交过来的数据
@@ -124,7 +144,8 @@ def detail1(request):
             IDC = i.IDC
             IP_list = list(eval(i.POOL1))
 
-        dtime = (datetime.datetime.now() + datetime.timedelta(minutes=-1)).strftime("%Y.%m.%d %H:%M")
+        # dtime = (datetime.datetime.now() + datetime.timedelta(minutes=-1)).strftime("%Y.%m.%d %H:%M")
+        dtime = (datetime.datetime.now().strftime("%Y.%m.%d %H:%M"))
         dtime_15ago = (datetime.datetime.now() + datetime.timedelta(minutes=-15)).strftime("%Y.%m.%d %H:%M")
 
         ts = int(time.mktime(time.strptime(dtime, "%Y.%m.%d %H:%M")))
@@ -137,15 +158,17 @@ def detail1(request):
             flow_data = es.flow_data('bjcc', ts15, ts, ip)
             all_data.append(flow_data)
 
-        di = []
+        di = dict()
         for f_data in all_data:
             for i in f_data:
                 if i["IP"] in di:
-                    f_data[i["IP"]].append(i)
+                    di[i["IP"]].append(i)
                 else:
-                    f_data[i["IP"]] = [i]
-            legend = f_data.keys()
-        # yaxis = [x["time_s"] for x in next(iter(di.values()))]
+                    di[i["IP"]] = [i]
+
+        legend = di.keys()
+        yaxis = [x["time_s"] for x in next(iter(di.values()))]
+
         series = []
         for k in legend:
             ob = {
@@ -154,13 +177,10 @@ def detail1(request):
             }
             series.append(ob)
 
-        return render(request, 'test2.html', {'idc_list': IDC, 'ips_list': IP_list, 'flow_data': all_data, 'legend': legend,'yaxis': yaxis, 'series':series})
+        return render(request, 'test2.html',
+                      {'idc_list': IDC, 'ips_list': IP_list, 'flow_data': all_data, 'legend': legend, 'yaxis': yaxis, 'series': series})
         # return render(request, 'test2.html', {'idc_list': IDC})
         # return render(request, 'test2.html')
-
-
-
-
 
 
 def response_as_json(data):

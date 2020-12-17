@@ -1,10 +1,7 @@
-
 from elasticsearch import Elasticsearch as Elast
 from elasticsearch import Elasticsearch
 from django.conf import settings
 import time, datetime
-
-
 
 
 class EsHandler(object):
@@ -65,9 +62,12 @@ class EsHandler(object):
                     ]
                 }
             },
+            "from": "0",
+            "size": "15"
         }
         try:
-            flow_data = []
+            flow_data_in = []
+            flow_data_out = []
 
             stime = []
             result = self.Get_res(self.index_prefix, body)
@@ -84,12 +84,14 @@ class EsHandler(object):
                 time_s = self.ConvertStime(time_s).split(' ')[1]
 
                 # flow = {"time_s": time_s, "IP": IP, "transfer_in": v_Transfer_in, "transfer_out": v_Transfer_out}
-                flow = {"time_s": time_s, "IP": IP, "transfer_in": v_Transfer_in}
-                flow_data.append(flow)
+                flow_in = {"time_s": time_s, "IP": IP, "transfer_in": v_Transfer_in}
+                flow_out = {"time_s": time_s, "IP": IP, "transfer_in": v_Transfer_out}
+                flow_data_in.append(flow_in)
+                flow_data_out.append(flow_out)
 
+            flow_data_in.sort(key=lambda e: e.__getitem__('time_s'))
+            flow_data_out.sort(key=lambda e: e.__getitem__('time_s'))
 
-            flow_data.sort(key=lambda e: e.__getitem__('time_s'))
-            
-            return flow_data
+            return flow_data_in
         except Exception as e:
             print(e)
