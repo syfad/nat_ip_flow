@@ -15,7 +15,7 @@
 
         option = {
             title: {
-                text: 'IP流量图IN',
+                text: 'IN',
             },
             tooltip: {
                 trigger: 'axis'
@@ -70,30 +70,25 @@
 
     </script>
 </div>
+
+
 <p style="margin: 12px; left: 20px">MB/s</p>
 <div id="main1" style="width: 800px;height:250px;">
-    <script type="text/javascript">
+        <script type="text/javascript">
         // 基于准备好的dom，初始化echarts实例
         var myChart1 = echarts.init(document.getElementById('main1'));
-        var ips_data = [];
 
-            {% for i in ips_list %}
-                ips_data.push('{{ i }}');
-            {% endfor %}
-        // 指定图表的配置项和数据
-
-
-    option = {
-        title: {
-            text: 'IP流量图(OUT)',
-        },
-        tooltip: {
-            trigger: 'axis'
-        },
-        legend: {
-            data: [
-                {% for ip in ips_list %}
-                        '{{ ip }}',
+        option = {
+            title: {
+                text: 'OUT',
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: [
+                    {% for i in legend_out %}
+                        '{{ i }}',
                     {% endfor %}
                 ]
             },
@@ -111,24 +106,31 @@
             xAxis: {
                 type: 'category',
                 boundaryGap: false,
-                data: ['1', '2', '3', '4', '5', '6']
+                data: [
+                    {% for yaxi in yaxis_out %}
+                        '{{ yaxi }}',
+                    {% endfor %}
+                ]
             },
             yAxis: {
                 type: 'value'
             },
             series: [
-                {% for ip in ips_list %}
+                {% for ip in series_out %}
                     {
-                        name: '{{ ip }}',
+                        name: '{{ ip.name }}',
                         type: 'line',
                         stack: '总量',
-                        data: [23, 34, 5, 67, 45, 12]
+                        data: [{% for data in ip.data %}'{{ data }}',{% endfor %}]
                     },
                 {% endfor %}
             ]
         };
 
+
         // 使用刚指定的配置项和数据显示图表。
+        {#myChart.clear();#}
+        {#option.legend.data=ips_data;#}
         myChart1.setOption(option);
 
     </script>

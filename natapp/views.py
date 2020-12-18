@@ -80,17 +80,18 @@ def Idc_graph(request):
     if request.method == "GET":
         idc = request.GET.get('idc')
         IDCS = models.IDC_IP_LIST.objects.filter(IDC=idc)
+
+        ipPool_data_in = []
         for i in IDCS:
             IDC = i.IDC
             IP_list = list(eval(i.POOL1))
 
-        ipPool_data = []
-        for ip in IP_list:
-            flow_data = es.flow_data(IDC, ts15, ts, ip)
-            ipPool_data.append(flow_data)
+            for ip in IP_list:
+                flow_data = es.Flow_traffic_in(IDC, ts15, ts, ip)
+                ipPool_data_in.append(flow_data)
 
         di = dict()
-        for f_data in ipPool_data:
+        for f_data in ipPool_data_in:
             for i in f_data:
                 if i["IP"] in di:
                     di[i["IP"]].append(i)
@@ -108,8 +109,37 @@ def Idc_graph(request):
             }
             series.append(ob)
 
+        #Flow_traffic_out
+        ipPool_data_out = []
+        for i in IDCS:
+            IDC = i.IDC
+            IP_list = list(eval(i.POOL1))
 
-        return render(request, 'flow.html', {'idc_list': IDC, 'ips_list': IP_list, 'legend': legend, 'yaxis': yaxis, 'series': series})
+            for ip in IP_list:
+                flow_data = es.Flow_traffic_out(IDC, ts15, ts, ip)
+                ipPool_data_out.append(flow_data)
+
+        di = dict()
+        for f_data in ipPool_data_out:
+            for i in f_data:
+                if i["IP"] in di:
+                    di[i["IP"]].append(i)
+                else:
+                    di[i["IP"]] = [i]
+
+        legend_out = di.keys()
+        yaxis_out = [x["time_s"] for x in next(iter(di.values()))]
+
+        series_out = []
+        for k in legend:
+            ob = {
+                "name": k,
+                "data": [x["transfer_in"] for x in di[k]]
+            }
+            series_out.append(ob)
+
+
+        return render(request, 'flow.html', {'legend': legend, 'yaxis': yaxis, 'series': series, 'legend_out': legend_out, 'yaxis_out': yaxis_out, 'series_out': series_out})
 
     elif request.method == "POST":
         # 获取用户通过post提交过来的数据
@@ -155,7 +185,7 @@ def detail1(request):
         es = es_model.EsHandler()
         all_data = []
         for ip in xlist:
-            flow_data = es.flow_data('bjcc', ts15, ts, ip)
+            flow_data = es.Flow_traffic_in('bjcc', ts15, ts, ip)
             all_data.append(flow_data)
 
         di = dict()
