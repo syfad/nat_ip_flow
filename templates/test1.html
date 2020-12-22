@@ -3,17 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="js/vue.min.js"></script>
 </head>
 <body>
 
-<div>测试仪</div>
+<div>test1</div>
 
 
 
-
-{% for idc in idc_list %}
-    <div class="body"><a href="/monitor/detail1/?idc={{ idc.IDC }}">{{idc.IDC}}</a></div>
+{% for i in idc_list %}
+    <div><a href="/monitor/detail1/?idc={{ i.IDC }}">{{ i.IDC }}</a></div>
 {% endfor %}
 
 </body>
+<script>
+    var card = new Vue({
+
+    })
+</script>
 </html>

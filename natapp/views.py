@@ -61,13 +61,14 @@ def graph(request):
 
 def index(request):
     if request.method == "GET":
-        IDC = models.IDC_IP_LIST.objects.all()
-        return render(request, 'index.html', {'idc_list': IDC})
+        IDC_list = models.IDC_IP_LIST.objects.all()
+
+        return render(request, 'index.html', {'idc_list': IDC_list})
 
     elif request.method == "POST":
         IDC = models.IDC_IP_LIST.objects.filter(IDC="bjcc")
         return render(request, 'index.html', {'idc_list': IDC})
-    return render(request, 'index.html')
+    # return render(request, 'index.html')
 
 
 def Idc_graph(request):
@@ -78,6 +79,7 @@ def Idc_graph(request):
     ts15 = int(time.mktime(time.strptime(dtime_15ago, "%Y.%m.%d %H:%M")))
     error_msg = ''
     if request.method == "GET":
+        IDC_list = models.IDC_IP_LIST.objects.all()
         idc = request.GET.get('idc')
         IDCS = models.IDC_IP_LIST.objects.filter(IDC=idc)
 
@@ -139,7 +141,7 @@ def Idc_graph(request):
             series_out.append(ob)
 
 
-        return render(request, 'flow.html', {'legend': legend, 'yaxis': yaxis, 'series': series, 'legend_out': legend_out, 'yaxis_out': yaxis_out, 'series_out': series_out})
+        return render(request, 'flow.html', {'idc_list': IDC_list, 'legend': legend, 'yaxis': yaxis, 'series': series, 'legend_out': legend_out, 'yaxis_out': yaxis_out, 'series_out': series_out})
 
     elif request.method == "POST":
         # 获取用户通过post提交过来的数据
@@ -155,20 +157,20 @@ def Idc_graph(request):
             error_msg = "用户名密码错误"
             return render(request, 'login.html', {'error_msg': error_msg})
 
-
 def detail(request):
     if request.method == "GET":
         # idc = request.GET.get('idc')
 
         IDC = models.IDC_IP_LIST.objects.all()
-        return render(request, 'test1.html', {'idc_list': IDC})
 
+        return render(request, 'test1.html', {'idc_list': IDC})
 
 def detail1(request):
     if request.method == "GET":
         idc = request.GET.get('idc')
 
         IDCS = models.IDC_IP_LIST.objects.filter(IDC=idc)
+        IDCS_list = models.IDC_IP_LIST.objects.all()
 
         for i in IDCS:
             IDC = i.IDC
@@ -207,10 +209,17 @@ def detail1(request):
             }
             series.append(ob)
 
-        return render(request, 'test2.html',
-                      {'idc_list': IDC, 'ips_list': IP_list, 'flow_data': all_data, 'legend': legend, 'yaxis': yaxis, 'series': series})
+
+
+        return render(request, 'test2.html', {'idc_list': IDCS, 'all_data':IDCS_list, 'ips_list': IP_list, 'flow_data': all_data, 'legend': legend, 'yaxis': yaxis, 'series': series})
         # return render(request, 'test2.html', {'idc_list': IDC})
         # return render(request, 'test2.html')
+
+
+
+
+
+
 
 
 def response_as_json(data):

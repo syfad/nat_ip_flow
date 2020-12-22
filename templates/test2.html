@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="js/vue.min.js"></script>
 </head>
 <body>
 
@@ -19,9 +20,13 @@
 {#{{ ips }}#}
 
 {#<div>{{ flow_data }}</div>#}
-{% for i in ips_list %}
-<div>{{ i }}</div>
-{% endfor %}
+{#{% for i in ips_list %}#}
+{#<div>{{ i }}</div>#}
+{#{% endfor %}#}
+{##}
+{#{% for k in idc_list %}#}
+{#<div>{{ k }}</div>#}
+{#{% endfor %}#}
 <div><a>======================分隔符======================</a></div>
 
 {#{% for k,v in flow_data.items %}#}
@@ -64,10 +69,26 @@
 
 {{ series }}
 
+<div style="color: #8a1f11"><a>======================分隔符======================</a></div>
+{% for i in idc_list.values %}
+    {% for x,v in i.items %}
+        {{ x }}-{{ v }}
+    {% endfor %}
+{% endfor %}
+<div style="color: #8a1f11"><a>======================分隔符======================</a></div>
+<div id="app">
+		<li v-for="item,key in list">
+			<span>{{item}}</span>
+</div>
 
 
 </body>
 <script>
-
+    let vm = new Vue({
+        el: "#app",
+        data:{
+            list: {{ idc_list }}
+        }
+    });
 </script>
 </html>
