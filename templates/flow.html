@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <!-- 引入 ECharts 文件 -->
     <script src="/static/js/echarts.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
     <title>Title</title>
     <style>
         .hide {
@@ -50,6 +51,28 @@
             border: 0.5px #DDDDDD solid;
         }
 
+        .pool {
+            height: 30px;
+            width: 60px;
+            border-radius: 10px;
+            background-color: #0e9aef;
+            text-align: center;
+            border: 1px #DDDDDD solid;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .pool1 {
+            height: 30px;
+            width: 60px;
+            border-radius: 10px;
+            background-color: #0a6aa1;
+            text-align: center;
+            border: 1px #DDDDDD solid;
+            color: white;
+            margin-left: 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -69,11 +92,11 @@
     <div class="item">
         <div id="i1" class="header" onclick="changeMenu('i1');">IDC机房流量</div>
         <div class="content">
-{#            <div class="body"><a href="/monitor/user_info/">用户列表</a></div>#}
+            {#            <div class="body"><a href="/monitor/user_info/">用户列表</a></div>#}
             {% for idc in idc_list %}
-{#                <div class="body"><a href="/monitor/graph/?idc={{ idc.IDC }}">{{idc.IDC}}</a></div>#}
-{#                <div class="body"><a href="/monitor/graph/?idc={{ idc.IDC }}">{{idc.IDC}}</a></div>#}
-                <div class="body"><a href="/monitor/graph/?idc={{ idc.IDC }}">{{idc.IDC}}</a></div>
+                {#                <div class="body"><a href="/monitor/graph/?idc={{ idc.IDC }}">{{idc.IDC}}</a></div>#}
+                {#                <div class="body"><a href="/monitor/graph/?idc={{ idc.IDC }}">{{idc.IDC}}</a></div>#}
+                <div class="body"><a href="/monitor/graph/?idc={{ idc.IDC }}">{{ idc.IDC }}</a></div>
             {% endfor %}
         </div>
     </div>
@@ -109,7 +132,11 @@
 </div>
 
 {#<div style="margin-left: 260px">bjcc</div>#}
-{#<div style="margin-left: 260px">POOL1</div>#}
+<div id="pool" style="height: 50px; margin-left: 260px">
+    {% for pool in pool_list %}
+        <button class="pool">{{ pool }}</button>
+    {% endfor %}
+</div>
 
 
 <div id="main" style="left: 260px; width: 800px;height:300px;">
@@ -178,7 +205,7 @@
 <p style="margin: 12px; margin-left: 300px">MB/s</p>
 
 <div id="main1" style="left: 260px;width: 800px;height:300px;">
-        <script type="text/javascript">
+    <script type="text/javascript">
         // 基于准备好的dom，初始化echarts实例
         var myChart1 = echarts.init(document.getElementById('main1'));
 
@@ -241,67 +268,6 @@
 
 </div>
 
-{#<div id="main" style="left: 260px; width: 750px;height:350px;"></div>#}
-
-
-{##}
-{#<div style="position: absolute; left: 300px; width: 800px;">#}
-{#    <table>#}
-{#        <thead>#}
-{#        <tr>#}
-{#            <th><input type="button" value="全选" onclick="chooseAll()"></th>#}
-{#            <th>名称</th>#}
-{#            <th>用户名</th>#}
-{#            <th>用户组</th>#}
-{#            <th>动作</th>#}
-{#        </tr>#}
-{##}
-{#        </thead>#}
-{##}
-{#        <tbody id="tb1">#}
-{#        <tr>#}
-{#            <td><input type="checkbox"></td>#}
-{#            <td>admin</td>#}
-{#            <td>管理员</td>#}
-{#            <td>User</td>#}
-{#            <td><input type="button" value="编辑" onclick="ShowModel()"></td>#}
-{#        </tr>#}
-{#        <tr>#}
-{#            <td><input type="checkbox"></td>#}
-{#            <td>张三</td>#}
-{#            <td>zhangsan</td>#}
-{#            <td>User</td>#}
-{#            <td><input type="button" value="编辑" onclick="ShowModel()"></td>#}
-{#        </tr>#}
-{#        <tr>#}
-{#            <td><input type="checkbox"></td>#}
-{#            <td>李四</td>#}
-{#            <td>lisi</td>#}
-{#            <td>User</td>#}
-{#            <td><input type="button" value="编辑" onclick="ShowModel()"></td>#}
-{#        </tr>#}
-{##}
-{#        </tbody>#}
-{#    </table>#}
-{#    <input type="button" value="反选" onclick="reverseAll()">#}
-{#    <input type="button" value="取消" onclick="cancelAll()">#}
-{##}
-{#</div>#}
-{##}
-{#<div id="h1" class="hide c1"></div>#}
-{##}
-{#<div id="h2" class="hide c2">#}
-{#    <div style="margin-top: 50px; margin-left: 10%">#}
-{#        <p><input type="text">名称</p>#}
-{#        <p><input type="text">用户名</p>#}
-{#        <p><input type="text">用户组</p>#}
-{#        <p>#}
-{#            <input type="button" value="确认" onclick="cancelModel()">#}
-{#            <input type="button" value="取消" onclick="cancelModel()">#}
-{#        </p>#}
-{#    </div>#}
-{#</div>#}
-
 
 </body>
 <script>
@@ -362,6 +328,18 @@
         document.getElementById('h2').classList.add('hide');
         // 获得id为i1和i2的div元素，加上hide样式
     }
+
+    let vm = new Vue({
+        el: "#pool",
+        data: {
+            Color: '#0a6aa1'
+        },
+        methods:{
+            changeColor(){
+                this.Color = "#0a6aa1"
+            }
+        }
+    })
 
 
 </script>

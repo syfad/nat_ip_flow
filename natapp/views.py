@@ -79,12 +79,29 @@ def Idc_graph(request):
     ts15 = int(time.mktime(time.strptime(dtime_15ago, "%Y.%m.%d %H:%M")))
     error_msg = ''
     if request.method == "GET":
-        IDC_list = models.IDC_IP_LIST.objects.all()
-        idc = request.GET.get('idc')
-        IDCS = models.IDC_IP_LIST.objects.filter(IDC=idc)
+        get_idc = request.GET.get('idc')
+        # pool_num = request.GET.get('pool')
+        poll_data = models.IDC_IP_LIST.objects.all()
+        Idc_req = models.IDC_IP_LIST.objects.filter(IDC=get_idc)
+
+        poll_list = Idc_req.values()
+        pool=[]
+        # IP_list = []
+        for i in poll_list:
+            if i['POOL1'] != '':
+                pool.append('POOL1')
+            if i['POOL2'] != '':
+                pool.append('POOL2')
+            if i['POOL3'] != '':
+                pool.append('POOL3')
+            if i['POOL4'] != '':
+                pool.append('POOL4')
+            # IP_list = i[pool_num]
+
+            # IP_list = list(eval(i[pool_num]))
 
         ipPool_data_in = []
-        for i in IDCS:
+        for i in Idc_req:
             IDC = i.IDC
             IP_list = list(eval(i.POOL1))
 
@@ -113,7 +130,7 @@ def Idc_graph(request):
 
         #Flow_traffic_out
         ipPool_data_out = []
-        for i in IDCS:
+        for i in Idc_req:
             IDC = i.IDC
             IP_list = list(eval(i.POOL1))
 
@@ -141,7 +158,9 @@ def Idc_graph(request):
             series_out.append(ob)
 
 
-        return render(request, 'flow.html', {'idc_list': IDC_list, 'legend': legend, 'yaxis': yaxis, 'series': series, 'legend_out': legend_out, 'yaxis_out': yaxis_out, 'series_out': series_out})
+
+
+        return render(request, 'flow.html', {'idc_list': poll_data, 'legend': legend, 'yaxis': yaxis, 'series': series, 'legend_out': legend_out, 'yaxis_out': yaxis_out, 'series_out': series_out, 'pool_list': pool, 'get_idc': get_idc})
 
     elif request.method == "POST":
         # 获取用户通过post提交过来的数据
@@ -170,7 +189,8 @@ def detail1(request):
         idc = request.GET.get('idc')
 
         IDCS = models.IDC_IP_LIST.objects.filter(IDC=idc)
-        IDCS_list = models.IDC_IP_LIST.objects.all()
+
+        # IDCS_list = models.IDC_IP_LIST.objects.all()
 
         for i in IDCS:
             IDC = i.IDC
@@ -209,9 +229,23 @@ def detail1(request):
             }
             series.append(ob)
 
+        IDCS_list = IDCS.values()
+        pool=[]
+        ips = []
+        for i in IDCS_list:
+            if i['POOL1'] != '':
+                pool.append('POOL1')
+            if i['POOL2'] != '':
+                pool.append('POOL2')
+            if i['POOL3'] != '':
+                pool.append('POOL3')
+            if i['POOL4'] != '':
+                pool.append('POOL4')
+            ips.append(i['POOL1'])
 
 
-        return render(request, 'test2.html', {'idc_list': IDCS, 'all_data':IDCS_list, 'ips_list': IP_list, 'flow_data': all_data, 'legend': legend, 'yaxis': yaxis, 'series': series})
+
+        return render(request, 'test2.html', {'idc_list': IDCS, 'all_data': pool, 'ips_list': IP_list, 'flow_data': all_data, 'legend': legend, 'yaxis': yaxis, 'series': series, 'ips': ips[0]})
         # return render(request, 'test2.html', {'idc_list': IDC})
         # return render(request, 'test2.html')
 
