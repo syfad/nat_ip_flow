@@ -99,7 +99,7 @@ class EsHandler(object):
                 # 格式化数据
                 v_Transfer_out = self.ConvertMB(flowBytes_out)
                 time_s = self.ConvertStime(time_s).split(' ')[1]
-                flow_out = {"time_s": time_s, "IP": IP, "transfer_in": v_Transfer_out}
+                flow_out = {"time_s": time_s, "IP": IP, "transfer_out": v_Transfer_out}
                 flow_data_out.append(flow_out)
             flow_data_out.sort(key=lambda e: e.__getitem__('time_s'))
             return flow_data_out

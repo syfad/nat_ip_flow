@@ -9,24 +9,6 @@
 
 <div>测试仪2</div>
 
-
-{#{% for i in  idc_list %}#}
-{#    <div>{{ idc_list }}</div>#}
-{##}
-{#{% for i in ips_list %}#}
-{#    <div>{{ i }}</div>#}
-{#{% endfor %}#}
-{##}
-{#{{ ips }}#}
-
-{#<div>{{ flow_data }}</div>#}
-{#{% for i in ips_list %}#}
-{#<div>{{ i }}</div>#}
-{#{% endfor %}#}
-{##}
-{#{% for k in idc_list %}#}
-{#<div>{{ k }}</div>#}
-{#{% endfor %}#}
 <div><a>======================分隔符======================</a></div>
 
 {#{% for k,v in flow_data.items %}#}
@@ -43,13 +25,9 @@
 {#    {% endfor %}#}
 {#{% endfor %}#}
 
-{% for flow_datum in flow_data %}
-{% for foo in flow_datum %}
-<div>{{ foo }}</div>
-{% endfor %}
-{% endfor %}
 
-<div style="color: #8a1f11"><a>======================分隔符======================</a></div>
+
+<div style="color: #8a1f11"><a>======================分隔符1======================</a></div>
 
 {% for i in legend %}
     {{ i }}
@@ -59,27 +37,34 @@
 <div>{{ yaxi }}</div>
 {% endfor %}
 
-{{ idc_list }}
 
 
-<div style="color: #8a1f11"><a>======================分隔符======================</a></div>
+<div style="color: #8a1f11"><a>======================分隔符2======================</a></div>
 
 {{ series }}
 
-<div style="color: #8a1f11"><a>======================分隔符======================</a></div>
-{% for i in idc_list.values %}
-    {% for x,v in i.items %}
-        {{ x }}-{{ v }}
-    {% endfor %}
-{% endfor %}
-<div style="color: #8a1f11"><a>======================分隔符======================</a></div>
+
+<div style="color: #8a1f11"><a>======================分隔符3======================</a></div>
+{#{% for i in idc_list.values %}#}
+{#    {% for x,v in i.items %}#}
+{#        {{ x }}-{{ v }}#}
+{#    {% endfor %}#}
+{#{% endfor %}#}
+<div style="color: #8a1f11"><a>======================分隔符4======================</a></div>
 {#{{ all_data }}#}
-{% for i in all_data %}
-<div>{{ i }}</div>
-{% endfor %}
+{#{% for i in all_data %}#}
+{#<div>{{ i }}</div>#}
+{#{% endfor %}#}
 
 
-<div style="color: #8a1f11"><a>======================分隔符======================</a></div>
+<div style="color: #8a1f11"><a>======================分隔符5======================</a></div>
+<div id="pool" style="height: 50px; margin-left: 260px">
+    {% for p in pool %}
+        <button class="pool"><a href="/monitor/detail1/?pool={{ p }}">{{ p }}</a></button>
+    {% endfor %}
+</div>
+
+
 {{ ips }}
 
 

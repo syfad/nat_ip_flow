@@ -80,12 +80,12 @@ def Idc_graph(request):
     error_msg = ''
     if request.method == "GET":
         get_idc = request.GET.get('idc')
-        # pool_num = request.GET.get('pool')
+        pool_num = request.GET.get('pool')
         poll_data = models.IDC_IP_LIST.objects.all()
         Idc_req = models.IDC_IP_LIST.objects.filter(IDC=get_idc)
 
         poll_list = Idc_req.values()
-        pool=[]
+        pool = []
         # IP_list = []
         for i in poll_list:
             if i['POOL1'] != '':
@@ -96,11 +96,14 @@ def Idc_graph(request):
                 pool.append('POOL3')
             if i['POOL4'] != '':
                 pool.append('POOL4')
-            # IP_list = i[pool_num]
+            # IP_list.append(i[pool_num])
 
-            # IP_list = list(eval(i[pool_num]))
 
+
+
+        #请求in/out,ES接口
         ipPool_data_in = []
+        ipPool_data_out = []
         for i in Idc_req:
             IDC = i.IDC
             IP_list = list(eval(i.POOL1))
@@ -109,6 +112,11 @@ def Idc_graph(request):
                 flow_data = es.Flow_traffic_in(IDC, ts15, ts, ip)
                 ipPool_data_in.append(flow_data)
 
+            for ip in IP_list:
+                flow_data = es.Flow_traffic_out(IDC, ts15, ts, ip)
+                ipPool_data_out.append(flow_data)
+
+        #Flow_traffic_in
         di = dict()
         for f_data in ipPool_data_in:
             for i in f_data:
@@ -129,14 +137,6 @@ def Idc_graph(request):
             series.append(ob)
 
         #Flow_traffic_out
-        ipPool_data_out = []
-        for i in Idc_req:
-            IDC = i.IDC
-            IP_list = list(eval(i.POOL1))
-
-            for ip in IP_list:
-                flow_data = es.Flow_traffic_out(IDC, ts15, ts, ip)
-                ipPool_data_out.append(flow_data)
 
         di = dict()
         for f_data in ipPool_data_out:
@@ -153,11 +153,9 @@ def Idc_graph(request):
         for k in legend:
             ob = {
                 "name": k,
-                "data": [x["transfer_in"] for x in di[k]]
+                "data": [x["transfer_out"] for x in di[k]]
             }
             series_out.append(ob)
-
-
 
 
         return render(request, 'flow.html', {'idc_list': poll_data, 'legend': legend, 'yaxis': yaxis, 'series': series, 'legend_out': legend_out, 'yaxis_out': yaxis_out, 'series_out': series_out, 'pool_list': pool, 'get_idc': get_idc})
@@ -187,14 +185,8 @@ def detail(request):
 def detail1(request):
     if request.method == "GET":
         idc = request.GET.get('idc')
-
+        pool_num = request.POST.get('pool')
         IDCS = models.IDC_IP_LIST.objects.filter(IDC=idc)
-
-        # IDCS_list = models.IDC_IP_LIST.objects.all()
-
-        for i in IDCS:
-            IDC = i.IDC
-            IP_list = list(eval(i.POOL1))
 
         # dtime = (datetime.datetime.now() + datetime.timedelta(minutes=-1)).strftime("%Y.%m.%d %H:%M")
         dtime = (datetime.datetime.now().strftime("%Y.%m.%d %H:%M"))
@@ -203,12 +195,22 @@ def detail1(request):
         ts = int(time.mktime(time.strptime(dtime, "%Y.%m.%d %H:%M")))
         ts15 = int(time.mktime(time.strptime(dtime_15ago, "%Y.%m.%d %H:%M")))
 
-        xlist = ['111.206.250.195', '111.206.250.201', '111.206.250.227', '111.206.250.233']
+
+
+        # xlist = ['111.206.250.195', '111.206.250.201', '111.206.250.227', '111.206.250.233']
+        # xlist = ['111.206.250.196', '111.206.250.202', '111.206.250.228', '111.206.250.234']
+
         es = es_model.EsHandler()
         all_data = []
-        for ip in xlist:
-            flow_data = es.Flow_traffic_in('bjcc', ts15, ts, ip)
-            all_data.append(flow_data)
+
+        for i in IDCS:
+            IDC = i.IDC
+            IP_list = list(eval(i.POOL2))
+
+            #循环获得取得ES接口数据
+            for ip in IP_list:
+                flow_data = es.Flow_traffic_in('bjcc', ts15, ts, ip)
+                all_data.append(flow_data)
 
         di = dict()
         for f_data in all_data:
@@ -218,9 +220,13 @@ def detail1(request):
                 else:
                     di[i["IP"]] = [i]
 
+        #前端IP的数据
         legend = di.keys()
+
+        #前端X轴的数
         yaxis = [x["time_s"] for x in next(iter(di.values()))]
 
+        #前端Y轴的数据
         series = []
         for k in legend:
             ob = {
@@ -229,9 +235,17 @@ def detail1(request):
             }
             series.append(ob)
 
+
+        #判断地址池的显示
         IDCS_list = IDCS.values()
         pool=[]
-        ips = []
+
+        ips = IDCS_list[0]
+        if pool_num == None:
+            pool_num = 'POOL1'
+        pool_ip = ips[pool_num]
+
+
         for i in IDCS_list:
             if i['POOL1'] != '':
                 pool.append('POOL1')
@@ -241,13 +255,10 @@ def detail1(request):
                 pool.append('POOL3')
             if i['POOL4'] != '':
                 pool.append('POOL4')
-            ips.append(i['POOL1'])
 
 
 
-        return render(request, 'test2.html', {'idc_list': IDCS, 'all_data': pool, 'ips_list': IP_list, 'flow_data': all_data, 'legend': legend, 'yaxis': yaxis, 'series': series, 'ips': ips[0]})
-        # return render(request, 'test2.html', {'idc_list': IDC})
-        # return render(request, 'test2.html')
+        return render(request, 'test2.html', {'legend': legend, 'yaxis': yaxis, 'series': series, 'ips': pool_ip, 'pool':pool})
 
 
 
