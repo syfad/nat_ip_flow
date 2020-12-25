@@ -15,6 +15,8 @@ from pyecharts.charts import Kline
 from pyecharts import options as opts
 from natapp import es_model
 import time, datetime
+import pymysql
+
 
 
 def login(request):
@@ -185,8 +187,13 @@ def detail(request):
 def detail1(request):
     if request.method == "GET":
         idc = request.GET.get('idc')
-        pool_num = request.POST.get('pool')
+        pool_num = request.GET.get('pool')
         IDCS = models.IDC_IP_LIST.objects.filter(IDC=idc)
+        if pool_num == None:
+            pool_num = 'POOL1'
+        pool_ip_list = models.IDC_IP_LIST.objects.filter(IDC=idc).values(pool_num)
+        for pool_list in pool_ip_list:
+            pool_list = pool_list['POOL1']
 
         # dtime = (datetime.datetime.now() + datetime.timedelta(minutes=-1)).strftime("%Y.%m.%d %H:%M")
         dtime = (datetime.datetime.now().strftime("%Y.%m.%d %H:%M"))
@@ -195,55 +202,17 @@ def detail1(request):
         ts = int(time.mktime(time.strptime(dtime, "%Y.%m.%d %H:%M")))
         ts15 = int(time.mktime(time.strptime(dtime_15ago, "%Y.%m.%d %H:%M")))
 
-
-
         # xlist = ['111.206.250.195', '111.206.250.201', '111.206.250.227', '111.206.250.233']
         # xlist = ['111.206.250.196', '111.206.250.202', '111.206.250.228', '111.206.250.234']
-
-        es = es_model.EsHandler()
-        all_data = []
-
-        for i in IDCS:
-            IDC = i.IDC
-            IP_list = list(eval(i.POOL2))
-
-            #循环获得取得ES接口数据
-            for ip in IP_list:
-                flow_data = es.Flow_traffic_in('bjcc', ts15, ts, ip)
-                all_data.append(flow_data)
-
-        di = dict()
-        for f_data in all_data:
-            for i in f_data:
-                if i["IP"] in di:
-                    di[i["IP"]].append(i)
-                else:
-                    di[i["IP"]] = [i]
-
-        #前端IP的数据
-        legend = di.keys()
-
-        #前端X轴的数
-        yaxis = [x["time_s"] for x in next(iter(di.values()))]
-
-        #前端Y轴的数据
-        series = []
-        for k in legend:
-            ob = {
-                "name": k,
-                "data": [x["transfer_in"] for x in di[k]]
-            }
-            series.append(ob)
-
 
         #判断地址池的显示
         IDCS_list = IDCS.values()
         pool=[]
 
-        ips = IDCS_list[0]
-        if pool_num == None:
-            pool_num = 'POOL1'
-        pool_ip = ips[pool_num]
+        # ips = IDCS_list[0]
+        # if pool_num == None:
+        #     pool_num = 'POOL1'
+        # pool_ip = ips[pool_num]
 
 
         for i in IDCS_list:
@@ -256,10 +225,43 @@ def detail1(request):
             if i['POOL4'] != '':
                 pool.append('POOL4')
 
+        es = es_model.EsHandler()
+        all_data = []
+
+        for i in IDCS:
+            IDC = i.IDC
+            # IP_list = list(eval(i.POOL2))
+
+            # 循环获得取得ES接口数据
+            for ip in pool_list:
+                flow_data = es.Flow_traffic_in(IDC, ts15, ts, ip)
+                all_data.append(flow_data)
+
+        di = dict()
+        for f_data in all_data:
+            for i in f_data:
+                if i["IP"] in di:
+                    di[i["IP"]].append(i)
+                else:
+                    di[i["IP"]] = [i]
+
+        # 前端IP的数据
+        legend = di.keys()
+
+        # 前端X轴的数
+        yaxis = [x["time_s"] for x in next(iter(di.values()))]
+
+        # 前端Y轴的数据
+        series = []
+        for k in legend:
+            ob = {
+                "name": k,
+                "data": [x["transfer_in"] for x in di[k]]
+            }
+            series.append(ob)
 
 
-        return render(request, 'test2.html', {'legend': legend, 'yaxis': yaxis, 'series': series, 'ips': pool_ip, 'pool':pool})
-
+        return render(request, 'test2.html', {'legend': legend, 'yaxis': yaxis, 'series': series, 'ips': pool_ip, 'pool':pool, 'get_idc': idc, 'pool_ip_list': pool_list})
 
 
 

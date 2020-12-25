@@ -60,12 +60,12 @@
 <div style="color: #8a1f11"><a>======================分隔符5======================</a></div>
 <div id="pool" style="height: 50px; margin-left: 260px">
     {% for p in pool %}
-        <button class="pool"><a href="/monitor/detail1/?pool={{ p }}">{{ p }}</a></button>
+        <button class="pool"><a href="/monitor/detail1/?idc={{ get_idc }}?pool={{ p }}">{{ p }}</a></button>
     {% endfor %}
 </div>
 
 
-{{ ips }}
+{{ pool_ip_list }}
 
 
 
