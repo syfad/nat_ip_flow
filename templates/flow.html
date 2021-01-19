@@ -133,12 +133,12 @@
     {#    {% for pool in pool_list %}#}
     {#        <button class="pool"><a href="/monitor/graph/?idc={{ get_idc }}?pool={{ pool }}">{{ pool }}</a></button>#}
     {#    {% endfor %}#}
-    <form action="">
-        <select name="cars">
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-            <option value="fiat" selected>Fiat</option>
-            <option value="audi">Audi</option>
+    <form action="/monitor/graph/?idc={{ idc.IDC }}">
+        <select name="pool_addr">
+        <a>地址池选择</a>
+            {% for pool in pool_list %}
+            <option value={{ pool }} selected>{{ pool }}</option>
+            {% endfor %}
             <input type="submit" value="提交">
         </select>
     </form>

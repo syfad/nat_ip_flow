@@ -29,6 +29,6 @@ urlpatterns = [
 
     # re_path(r'^test/$', views.IndexView.as_view(), name='demo'),
 
-    url(r'^bar/$', views.ChartView.as_view(), name='natapp'),
-    url(r'^test/$', views.IndexView.as_view(), name='natapp'),
+    # url(r'^bar/$', views.ChartView.as_view(), name='natapp'),
+    # url(r'^test/$', views.IndexView.as_view(), name='natapp'),
 ]

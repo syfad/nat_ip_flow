@@ -79,6 +79,7 @@ def Idc_graph(request):
     dtime_15ago = (datetime.datetime.now() + datetime.timedelta(minutes=-15)).strftime("%Y.%m.%d %H:%M")
     ts = int(time.mktime(time.strptime(dtime, "%Y.%m.%d %H:%M")))
     ts15 = int(time.mktime(time.strptime(dtime_15ago, "%Y.%m.%d %H:%M")))
+
     error_msg = ''
     if request.method == "GET":
         get_idc = request.GET.get('idc')
@@ -99,8 +100,6 @@ def Idc_graph(request):
             if i['POOL4'] != '':
                 pool.append('POOL4')
             # IP_list.append(i[pool_num])
-
-
 
 
         #请求in/out,ES接口
@@ -139,7 +138,6 @@ def Idc_graph(request):
             series.append(ob)
 
         #Flow_traffic_out
-
         di = dict()
         for f_data in ipPool_data_out:
             for i in f_data:
@@ -175,6 +173,11 @@ def Idc_graph(request):
         else:
             error_msg = "用户名密码错误"
             return render(request, 'login.html', {'error_msg': error_msg})
+
+
+
+
+
 
 def detail(request):
     if request.method == "GET":
@@ -260,65 +263,5 @@ def detail1(request):
             }
             series.append(ob)
 
-
         return render(request, 'test2.html', {'legend': legend, 'yaxis': yaxis, 'series': series, 'ips': pool_ip, 'pool':pool, 'get_idc': idc, 'pool_ip_list': pool_list})
 
-
-
-
-
-
-
-def response_as_json(data):
-    json_str = json.dumps(data)
-    response = HttpResponse(
-        json_str,
-        content_type="application/json",
-    )
-    response["Access-Control-Allow-Origin"] = "*"
-    return response
-
-
-def json_response(data, code=200):
-    data = {
-        "code": code,
-        "msg": "success",
-        "data": data,
-    }
-    return response_as_json(data)
-
-
-def json_error(error_string="error", code=500, **kwargs):
-    data = {
-        "code": code,
-        "msg": error_string,
-        "data": {}
-    }
-    data.update(kwargs)
-    return response_as_json(data)
-
-
-JsonResponse = json_response
-JsonError = json_error
-
-
-def bar_base() -> Bar:
-    c = (
-        Bar()
-            .add_xaxis(["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"])
-            .add_yaxis("商家A", [randrange(0, 100) for _ in range(6)])
-            .add_yaxis("商家B", [randrange(0, 100) for _ in range(6)])
-            .set_global_opts(title_opts=opts.TitleOpts(title="bar-基本示例", subtitle="我是副标题"))
-            .dump_options_with_quotes()
-    )
-    return c
-
-
-class ChartView(APIView):
-    def get(self, request, *args, **kwargs):
-        return JsonResponse(json.loads(bar_base()))
-
-
-class IndexView(APIView):
-    def get(self, request, *args, **kwargs):
-        return HttpResponse(content=open("./templates/test.html").read())
