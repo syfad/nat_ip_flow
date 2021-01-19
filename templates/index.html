@@ -69,12 +69,10 @@
     <div class="item">
         <div id="i1" class="header" onclick="changeMenu('i1');">IDC机房流量</div>
         <div class="content">
-{#            <div class="body"><a href="/monitor/user_info/">用户列表</a></div>#}
-            {% for idc in idc_list %}
-{#                <div class="body"><a href="/monitor/graph/?idc={{ idc.IDC }}">{{idc.IDC}}</a></div>#}
-{#                <div class="body"><a href="/monitor/graph/?idc={{ idc.IDC }}">{{idc.IDC}}</a></div>#}
-                <div class="body"><a href="/monitor/graph/?idc={{ idc.IDC }}">{{idc.IDC}}</a></div>
-            {% endfor %}
+
+           {% for idc in idc_list %}-->
+<!--                <div class="body"><a href="/monitor/graph/?idc={{ idc.IDC }}">{{idc.IDC}}</a></div>-->
+<!--            {% endfor %}
         </div>
     </div>
 
