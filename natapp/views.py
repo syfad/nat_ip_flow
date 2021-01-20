@@ -80,16 +80,23 @@ def Idc_graph(request):
     ts = int(time.mktime(time.strptime(dtime, "%Y.%m.%d %H:%M")))
     ts15 = int(time.mktime(time.strptime(dtime_15ago, "%Y.%m.%d %H:%M")))
 
+    get_idc = request.GET.get('idc')
+    pool_num = request.GET.get('pool_addr')
+
+
     error_msg = ''
     if request.method == "GET":
-        get_idc = request.GET.get('idc')
-        pool_num = request.GET.get('pool')
         poll_data = models.IDC_IP_LIST.objects.all()
         Idc_req = models.IDC_IP_LIST.objects.filter(IDC=get_idc)
 
+        #取对应idc机房IP数据
         poll_list = Idc_req.values()
+
+        print(pool_num)
+        print(get_idc)
+        # print(poll_list)
+
         pool = []
-        # IP_list = []
         for i in poll_list:
             if i['POOL1'] != '':
                 pool.append('POOL1')
@@ -99,14 +106,13 @@ def Idc_graph(request):
                 pool.append('POOL3')
             if i['POOL4'] != '':
                 pool.append('POOL4')
-            # IP_list.append(i[pool_num])
-
 
         #请求in/out,ES接口
         ipPool_data_in = []
         ipPool_data_out = []
         for i in Idc_req:
             IDC = i.IDC
+            # IP_list = list(eval(i.POOL1))
             IP_list = list(eval(i.POOL1))
 
             for ip in IP_list:

@@ -22,8 +22,11 @@ from django.conf.urls import url
 
 urlpatterns = [
     path('login/', views.login),
-    path('graph/', views.Idc_graph),
+    re_path('graph/', views.Idc_graph),
     re_path(r'^index/', views.index),
+
+    # re_path('graph/(\w+)/', views.Get_Cid_Info),
+
     re_path(r'detail/', views.detail),
     re_path(r'detail1/', views.detail1),
 

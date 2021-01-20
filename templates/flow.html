@@ -89,7 +89,7 @@
 
 
 <div style="margin-top: 80px; height: 50px; width: 200px">
-    <div class="item">
+    <div class="item">c
         <div id="i1" class="header" onclick="changeMenu('i1');">IDC机房流量</div>
         <div class="content">
             {% for idc in idc_list %}
@@ -133,14 +133,19 @@
     {#    {% for pool in pool_list %}#}
     {#        <button class="pool"><a href="/monitor/graph/?idc={{ get_idc }}?pool={{ pool }}">{{ pool }}</a></button>#}
     {#    {% endfor %}#}
-    <form action="/monitor/graph/?idc={{ idc.IDC }}">
+    <form action="/monitor/graph/">
+        <select name="idc">
+            {% for idc in idc_list %}
+            <option value={{ idc.IDC }} selected>{{ idc.IDC }}</option>
+            {% endfor %}
+        </select>
+
         <select name="pool_addr">
-        <a>地址池选择</a>
             {% for pool in pool_list %}
             <option value={{ pool }} selected>{{ pool }}</option>
             {% endfor %}
-            <input type="submit" value="提交">
         </select>
+    <input type="submit" value="提交">
     </form>
 </div>
 
