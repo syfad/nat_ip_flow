@@ -92,11 +92,8 @@ def Idc_graph(request):
         #取对应idc机房IP数据
         poll_list = Idc_req.values()
 
-        print(pool_num)
-        print(get_idc)
-        # print(poll_list)
-
         pool = []
+        get_ips = []
         for i in poll_list:
             if i['POOL1'] != '':
                 pool.append('POOL1')
@@ -107,6 +104,17 @@ def Idc_graph(request):
             if i['POOL4'] != '':
                 pool.append('POOL4')
 
+            if pool_num == None:
+                pool_num = "POOL1"
+                get_ips.append(i[pool_num])
+            else:
+                if i[pool_num] == '':
+                    get_ips.append(i['POOL1'])
+                else:
+                    get_ips.append(i[pool_num])
+
+        # print(get_ips[0])
+
         #请求in/out,ES接口
         ipPool_data_in = []
         ipPool_data_out = []
@@ -115,11 +123,12 @@ def Idc_graph(request):
             # IP_list = list(eval(i.POOL1))
             IP_list = list(eval(i.POOL1))
 
-            for ip in IP_list:
+            # for ip in list(eval(get_ips[0])):
+            for ip in list(eval(get_ips[0])):
                 flow_data = es.Flow_traffic_in(IDC, ts15, ts, ip)
                 ipPool_data_in.append(flow_data)
 
-            for ip in IP_list:
+            for ip in list(eval(get_ips[0])):
                 flow_data = es.Flow_traffic_out(IDC, ts15, ts, ip)
                 ipPool_data_out.append(flow_data)
 
