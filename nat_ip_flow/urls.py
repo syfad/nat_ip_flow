@@ -19,6 +19,6 @@ from django.urls import path, re_path, include
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    re_path(r'^monitor/', include("natapp.urls")),
+    # path('admin/', admin.site.urls),
+    re_path(r'', include("natapp.urls")),
 ]

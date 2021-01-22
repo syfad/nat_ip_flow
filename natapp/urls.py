@@ -27,8 +27,8 @@ urlpatterns = [
 
     # re_path('graph/(\w+)/', views.Get_Cid_Info),
 
-    re_path(r'detail/', views.detail),
-    re_path(r'detail1/', views.detail1),
+    # re_path(r'detail/', views.detail),
+    # re_path(r'detail1/', views.detail1),
 
     # re_path(r'^test/$', views.IndexView.as_view(), name='demo'),
 
